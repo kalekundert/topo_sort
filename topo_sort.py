@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 
+from heap import Heap
+
 class Graph:
+    """
+    A collection of nodes connected by directed edges.
+
+    Nodes can be any hashable object.  Arbitrary key/value pairs can be 
+    associated with each node and edge.  The underlying data structure is an 
+    adjacency list, which allows for constant-time insertions, deletions, and 
+    look-ups.
+    """
 
     def __init__(self):
         self.nodes = {}
@@ -21,39 +31,30 @@ class Graph:
         return list(self.edges_fwd.get(k, {}))
 
 def topo_sort(g):
+    """
+    Yield the nodes of the given directed graph such that (i) each node comes 
+    after all of its ancestors and (ii) in sorted order otherwise.
+    """
     dep_nodes = {}
-    indep_nodes = []
+    indep_nodes = Heap()
 
     for k in g.nodes:
         n_deps = len(g.get_upstream_nodes(k))
         if n_deps == 0:
-            indep_nodes.append(k)
+            indep_nodes.push(k)
         else:
             dep_nodes[k] = n_deps
 
     while indep_nodes:
-        k = indep_nodes.pop(0)
+        k = indep_nodes.pop()
         yield k
 
         for k2 in g.get_downstream_nodes(k):
             dep_nodes[k2] -= 1
             if dep_nodes[k2] == 0:
                 del dep_nodes[k2]
-                indep_nodes.append(k2)
+                indep_nodes.push(k2)
 
     if dep_nodes:
         raise ValueError('cycle detected')
-
-g = Graph()
-g.add_node('A')
-g.add_node('B')
-g.add_node('C')
-g.add_node('D')
-
-g.add_edge('A', 'B')
-g.add_edge('C', 'D')
-
-print(list(topo_sort(g)))
-
-
 
