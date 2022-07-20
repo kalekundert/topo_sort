@@ -1,0 +1,28 @@
+- Use adjacency list?
+  - Adjacency list: Mapping between nodes and neighbors, e.g. Dict[node, 
+    Set[node]]
+  - Neighbors can be set or dict, depending on if data is associated with each 
+    edge.
+
+- How do the data structures for directed and undirected graphs differ:
+  - Directed: need separate data structures for forward and reverse nodes
+
+- How to associate data with each node?
+  - Can start without this, and add it later as a wrinkle.
+  - Basically, just need to store nodes with dict instead of set.
+  - Each node is unique, but might share the same data.
+
+- What if there are unconnected nodes?
+  - This really shouldn't be a problem, but perhaps depends on the algorithm.
+
+- What if there is a cycle?
+  - e.g. [A→A], [A→B, B→A], etc.
+
+- How to control the order of nodes?
+  - e.g. for the graph [A→B, C→D], get the following outputs:
+    - A, B, C, D
+    - A, C, B, D
+
+- Extra hard option: group by type, in the smallest possible number of groups
+  - e.g. [A→B, B]
+
